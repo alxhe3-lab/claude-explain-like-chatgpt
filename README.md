@@ -4,8 +4,6 @@
 
 [English](#english) · [Français](#français)
 
-<p align="center"><img src="examples/tug-of-war.svg" alt="Resting membrane potential drawn as a tug of war" width="620"></p>
-
 ---
 
 ## English
@@ -49,7 +47,7 @@ The main lesson: **the problem is density, not length.** A long answer is fine i
 > - 🟠 **Sodium (Na⁺)** pulls toward +67 mV, with very few players.
 > - The marker stops near the strongest team: **−70 mV**.
 >
-> *(the diagram at the top of this page)*
+> *(here, a diagram drawn in the chat, right under the comparison)*
 >
 > 📌 **Key takeaway:** the more easily an ion crosses, the harder it pulls.
 
@@ -63,6 +61,10 @@ The main lesson: **the problem is density, not length.** A long answer is fine i
 - **Both cases, always**: too much and too little, side by side.
 - **Words**: every technical term translated, simple verbs, a jargon check and a "would this mislead you in an exam?" check before sending.
 - **Speed when you need it**: the quick version uses no tools at all.
+
+### Images in the right place: what we found
+
+Why Claude's images often pile up at the end, and how to make them appear right under the sentence they illustrate (tested methods, the best one, a free diagram bank): **[claude-inline-images](https://github.com/alxhe3-lab/claude-inline-images)**.
 
 ### Install
 
@@ -111,6 +113,10 @@ Ce qu'on a appris : **le problème, c'est la densité, pas la longueur.** Une r�
 | [`explication-claire`](skills-fr-medecine/explication-claire/SKILL.md) | « Explique », « pourquoi », « reprends depuis le début », « je comprends toujours pas » | Une fiche (question précise) ou un mini-cours (sujet large) : gros titres, le fil des « pourquoi », une image de la vie courante, les schémas de ton cours placés juste sous ce qu'ils expliquent, l'excès et le manque, « À retenir », un récap en flèches, un QCM cliquable |
 | [`explication-rapide`](skills-fr-medecine/explication-rapide/SKILL.md) | Un mot, une phrase, une capture d'écran | Une réponse éclair de 40 à 120 mots, **sans outil**, pour reprendre ton cours tout de suite |
 | [`clear-explanation`](skills/clear-explanation/SKILL.md) et [`quick-explanation`](skills/quick-explanation/SKILL.md) | Les mêmes, en anglais, pour toutes les matières | |
+
+### Les images au bon endroit
+
+Pourquoi les images de Claude finissent souvent toutes à la fin, et comment les afficher juste sous la phrase qu'elles illustrent : **[claude-inline-images](https://github.com/alxhe3-lab/claude-inline-images)**. Banque de 425 schémas de médecine en français : [schemas-medecine](https://github.com/alxhe3-lab/schemas-medecine).
 
 ### Installer
 
