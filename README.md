@@ -57,7 +57,8 @@ The main lesson: **the problem is density, not length.** A long answer is fine i
 
 - **Big, separated headings**: `#` for each part of a lesson, `##` for each block of a sheet, a line between parts.
 - **One sentence per line**, with a blank line in between (otherwise the chat glues them into a paragraph).
-- **Your own material first**: a figure from your notes or course pages, then a slide or textbook figure **annotated** in color (frames, numbered badges, legend), then a web image, then a diagram drawn with Claude's visual tool. Never a diagram in a code block.
+- **Images in the right place**: each diagram appears right under the sentence it explains, drawn in the chat, never sent as attachments that the app piles up at the end.
+- **Your own material first**: a diagram copied from your own study pages (with [a small script](skills/clear-explanation/scripts/figure_to_chat.py)), then a slide or textbook figure redrawn and **annotated** in color, then a web image, then a diagram drawn from scratch. Never a diagram in a code block.
 - **The chain of "why"**: each part answers the question the previous one raises.
 - **Both cases, always**: too much and too little, side by side.
 - **Words**: every technical term translated, simple verbs, a jargon check and a "would this mislead you in an exam?" check before sending.
@@ -107,7 +108,7 @@ Ce qu'on a appris : **le problème, c'est la densité, pas la longueur.** Une r�
 
 | Skill | Quand | Ce que tu obtiens |
 |---|---|---|
-| [`explication-claire`](skills-fr-medecine/explication-claire/SKILL.md) | « Explique », « pourquoi », « reprends depuis le début », « je comprends toujours pas » | Une fiche (question précise) ou un mini-cours (sujet large) : gros titres, le fil des « pourquoi », une image de la vie courante, les schémas de ton cours ou des figures annotées, l'excès et le manque, « À retenir », un récap en flèches, un QCM cliquable |
+| [`explication-claire`](skills-fr-medecine/explication-claire/SKILL.md) | « Explique », « pourquoi », « reprends depuis le début », « je comprends toujours pas » | Une fiche (question précise) ou un mini-cours (sujet large) : gros titres, le fil des « pourquoi », une image de la vie courante, les schémas de ton cours placés juste sous ce qu'ils expliquent, l'excès et le manque, « À retenir », un récap en flèches, un QCM cliquable |
 | [`explication-rapide`](skills-fr-medecine/explication-rapide/SKILL.md) | Un mot, une phrase, une capture d'écran | Une réponse éclair de 40 à 120 mots, **sans outil**, pour reprendre ton cours tout de suite |
 | [`clear-explanation`](skills/clear-explanation/SKILL.md) et [`quick-explanation`](skills/quick-explanation/SKILL.md) | Les mêmes, en anglais, pour toutes les matières | |
 

@@ -76,24 +76,30 @@ This skill makes Claude answer that way, without losing accuracy. The problem is
 6. **"The recap to memorize"**: 3 to 6 chains of arrows. Not a summary in sentences.
 7. **The mini-quiz** (section 5).
 
-## 4. Visuals: the user's own material first
+## 4. Visuals: in the middle of the text, the user's own material first
 
-Take the first source that exists, in this order. Never modify an original file: copy it to your workspace and work on the copy.
+**Rule n°1 (blocking): every visual appears right under the sentence it illustrates. Never all grouped at the end.**
+- Show a visual **only** with a tool that displays it exactly where you call it: the chat's drawing tool (the Visualizer: `show_widget`, after its `read_me`) or image search.
+- **Never an attachment** for a visual inside an explanation (file-sending tool, PNG or JPG file): the app places attachments wherever it wants, often all at the end, and the reader no longer knows when to look at them.
+- **Work order:**
+  1. Prepare all the visuals first, silently (figure copies, searches).
+  2. Then write the answer piece by piece: the text of one part, then the call that displays its visual, then the text of the next part, and so on.
+- If your environment only shows text sent through a messaging tool (for example `SendUserMessage`), send each piece of text with it; otherwise text written between two tool calls may be summarized and not shown.
+- Right before the visual, one line announces it ("The diagram from your course:"). Right after it, one line 👀 **What to look at:** …
 
-**A. A figure from the user's own study pages** (their notes, their summary pages). It is already right and familiar: copy it, do not redraw it. For an HTML page, screenshot only that figure (Playwright, `deviceScaleFactor: 2`, `element.screenshot()`).
+Take the first source that exists, in this order. Never modify an original file: work on a copy.
 
-**B. A figure from their slides or textbook, annotated.**
-1. Find the right slide or page by its text (python-pptx or pdftotext).
-2. Convert to PDF (`soffice --headless --convert-to pdf`) and render the page at 220 dpi (`pdftoppm -r 220`).
-3. Look at it, then crop the figure.
-4. Annotate it with Pillow (DejaVu Sans font):
-   - a thick (6 px) rounded colored frame around each important element, in the colors of the text's dots;
-   - a numbered badge (white circle with a border of the same color) on the frame's corner;
-   - under the image, a white legend band: one line per number, with the key word in bold and in the frame's color;
-   - a small grey source line: "Figure from <source>, annotated".
-5. Look at the final image before sending it: every frame surrounds something visible, nothing important is hidden, the legend is readable.
+**A. A diagram from the user's own study pages, copied as is (best choice).** It is already right and familiar: do not redraw it.
+- For an HTML page with SVG diagrams, use [`scripts/figure_to_chat.py`](scripts/figure_to_chat.py): `python3 figure_to_chat.py page.html` lists the figures, `python3 figure_to_chat.py page.html <n> fig.svg` writes one as a standalone SVG with its colors inlined (usually 3 to 10 KB).
+- Display it with `show_widget`, in HTML mode, inside a white card (it was made for a light background): `<div style="background:#fff;border-radius:12px;padding:8px 4px">`, the SVG copied exactly, then `</div>`.
+- Only SVG figures. A photo or scanned figure cannot be displayed in place: use B, C or D.
 
-**C. A web image** (image search tool), only if A and B do not exist, or as an extra.
+**B. A figure from their slides or textbook, redrawn and annotated.**
+1. Find the right slide or page by its text (python-pptx or pdftotext), convert to PDF (`soffice --headless --convert-to pdf`), render it (`pdftoppm -r 110`) and look at it.
+2. Redraw it as a simplified SVG with `show_widget` (same elements, same layout), then annotate it: colored rounded frames around the important elements, numbered badges, the legend of the numbers right below, and a source line: "Redrawn from slide <n> of your course".
+3. Why redraw: an image file can only be shown as an attachment, so not in its place. The drawing shows up exactly where you call it.
+
+**C. A web image** (image search tool, which displays in place), only if A and B do not exist, or as an extra.
 - Pick the simplest one, in the user's language if possible.
 - Below it, write 👀 **What to look at:** …, and translate any foreign labels.
 
@@ -107,7 +113,10 @@ Take the first source that exists, in this order. Never modify an original file:
 - Sheet mode: one visual (A if it exists, otherwise D). No more than 3 tool calls to get it.
 - Lesson mode: at least one visual per part.
 
-**Never:** a diagram in a code block, in ASCII, or in hand-aligned characters.
+**Never:**
+- a diagram in a code block, in ASCII, or in hand-aligned characters;
+- an image attachment inside an explanation;
+- all the visuals grouped at the end.
 
 ## 5. Quiz
 
@@ -136,7 +145,7 @@ Take the first source that exists, in this order. Never modify an original file:
 1. The mode is chosen and respected.
 2. Headings: `#` for lesson parts, `##` for sheet blocks, each with its emoji, and a `---` between blank lines before each one.
 3. One sentence per line, separated by a blank line.
-4. Visuals follow the order A → B → C → D. No diagram in a code block. Every annotated image was looked at before sending.
+4. Every visual is displayed in the middle of the text, right under what it illustrates, by the drawing tool or image search. No attachment, no visual grouped at the end, no diagram in a code block. Sources follow the order A → B → C → D.
 5. Both cases are covered whenever there is an excess or a shortage.
 6. Every technical word and acronym is translated.
 7. In lesson mode: a 📌 per part, an arrow recap, the quiz.

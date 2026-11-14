@@ -14,6 +14,7 @@ Ce qu'un étudiant en médecine a dit en testant les versions successives :
 - Comparaison avec ChatGPT (environ 1 700 mots, 7 images) : plus clair malgré la longueur. Le problème de Claude était la densité, pas la longueur (« c'est pas grave si c'est un peu plus long »).
 - Version 4 : titres trop petits et pas assez gras, pas assez d'espace entre les parties ; images d'internet pas claires.
 - Ce qu'il veut pour les images : d'abord les schémas de ses cours optimisés (« de qualité, il a juste à les copier »), puis les figures de ses manuels et diapos, annotées ; internet en dernier.
+- Version 5 : les schémas étaient envoyés en pièces jointes, et l'app les a tous rangés à la fin, « illisible, je sais pas quand regarder les images ». Chaque image doit être au milieu des explications, juste sous ce qu'elle illustre.
 
 L'étudiant est en médecine, parfois sans base scientifique : une notion de collège peut lui manquer. Il apprend par schémas, gros blocs et flèches, pas par paragraphes. Le but : qu'il comprenne du premier coup, puis qu'il sache le redire avec les mots de son prof.
 
@@ -90,29 +91,36 @@ L'étudiant est en médecine, parfois sans base scientifique : une notion de col
 6. **« Le récap à mémoriser »** : 3 à 6 chaînes de flèches (« K⁺ ↑ → dépolarisation → canaux Na⁺ bloqués → risque cardiaque »). Pas un résumé en phrases.
 7. **Le mini-test** (section 5).
 
-## 4. Les visuels : d'abord ceux de son cours
+## 4. Les visuels : au milieu du texte, d'abord ceux de son cours
 
-Prends la première source qui existe, dans cet ordre. Ne modifie jamais un fichier d'origine : copie-le dans ton espace de travail et travaille sur la copie.
+**Règle n°1 (bloquante) : chaque visuel apparaît juste sous la phrase qu'il illustre. Jamais regroupés à la fin.**
+- Un visuel s'affiche **seulement** avec un outil qui le montre à l'endroit exact de l'appel : l'outil de dessin du chat (le Visualiseur : `show_widget`, après son `read_me`) ou la recherche d'images.
+- **Jamais de pièce jointe** pour un visuel du cours (outil d'envoi de fichier, image PNG ou JPG) : l'app range les pièces jointes où elle veut, souvent toutes à la fin, et on ne sait plus quand les regarder.
+- **Ordre de travail :**
+  1. Prépare d'abord tous les visuels, en silence (copies de figures, recherches).
+  2. Puis écris la réponse morceau par morceau : le texte d'une partie, puis l'appel qui affiche son visuel, puis le texte de la partie suivante, et ainsi de suite.
+- Si ton environnement n'affiche que le texte envoyé par un outil de message (par exemple `SendUserMessage`), envoie chaque morceau de texte avec lui. Sinon, le texte écrit entre deux outils peut être résumé et ne pas apparaître.
+- Juste avant le visuel, une ligne l'annonce (« Le schéma de ton cours : »). Juste après, une ligne 👀 **Ce qu'il faut regarder :** …
 
-**A. Un schéma de son cours optimisé (le meilleur choix).** Il est déjà juste, beau, en couleurs. Ne le redessine pas : copie-le.
-1. Fichier : la page de cours (`<dossier de cours>/cours-optimises/<Matière>/<CMn|TPn>/cours.html` dans l'exemple).
-2. Liste ses figures. Chaque `figure.fig` a un `figcaption` qui pose une question (« Où se place le potentiel de repos, et pourquoi ? ») : choisis celle qui répond à la partie.
-3. Fais une capture de cette seule figure avec Playwright (Chromium) : page de 1100 px de large, `deviceScaleFactor: 2`, `figure.screenshot()`.
-4. Montre l'image dans la réponse (outil d'envoi de fichier), avec en dessous : « Schéma de ton cours optimisé (<Matière> <CMn>) ».
+Prends la première source qui existe, dans cet ordre. Ne modifie jamais un fichier d'origine : travaille sur une copie.
 
-**B. Une figure de la diapo du prof ou du manuel, annotée.**
-1. Fichiers : les diapos du prof (pptx ou pdf) ou le manuel. En Anatomie, les planches de l'atlas ou du manuel (Kamina, Netter…).
-2. Trouve la bonne diapo par son texte (python-pptx ou pdftotext).
-3. Convertis le fichier en PDF (`soffice --headless --convert-to pdf`) et rends la page à 220 dpi (`pdftoppm -r 220`).
-4. Regarde la page, puis recadre la figure.
-5. Annote-la avec Pillow (police DejaVu Sans, qui affiche ⁺ et −) :
-   - un cadre arrondi de couleur, épais (6 px), autour de chaque élément important, aux couleurs des pastilles du texte ;
-   - une pastille numérotée (cercle blanc bordé de la même couleur) posée sur le coin du cadre ;
-   - sous l'image, une bande blanche de légende : une ligne par numéro, en français, avec le mot clé en gras et dans la couleur du cadre ;
-   - en bas, une ligne de source en petit gris : « Figure de la diapo de ton prof (<Matière> <CMn>, diapo <n>), annotée ».
-6. Regarde l'image finale avant de l'envoyer. Chaque cadre entoure quelque chose de visible, rien d'important n'est caché, et la légende se lit.
+**A. Un schéma de son cours, copié tel quel (le meilleur choix).** Il est déjà juste et il le connaît : ne le redessine pas.
+- Pour une page HTML avec des schémas SVG (par exemple un cours optimisé), utilise [`scripts/figure_vers_chat.py`](scripts/figure_vers_chat.py) :
+  - `python3 figure_vers_chat.py cours.html` liste les figures (numéro, type, légende) ;
+  - `python3 figure_vers_chat.py cours.html <n°> fig.svg` écrit la figure en SVG autonome, couleurs comprises (3 à 10 Ko en général).
+- Affiche-la avec `show_widget`, en HTML, dans un cadre blanc (elle est faite pour un fond clair) : `<div style="background:#fff;border-radius:12px;padding:8px 4px">`, le SVG recopié exactement, puis `</div>`.
+- Seulement les figures en SVG. Une photo ou une planche scannée ne s'affiche pas à sa place : prends B, C ou D. Au-delà de 15 Ko, garde la figure seulement si c'est la plus importante.
 
-**C. Une image d'internet** (outil de recherche d'images), seulement si A et B n'existent pas, ou en complément.
+**B. Une figure de la diapo du prof ou du manuel, redessinée et annotée.**
+1. Trouve la bonne diapo par son texte (python-pptx ou pdftotext), convertis-la (`soffice --headless --convert-to pdf`), rends la page (`pdftoppm -r 110`) et regarde-la. En Anatomie, les planches de l'atlas ou du manuel (Kamina, Netter…).
+2. Redessine-la en SVG simplifié avec `show_widget` (mêmes éléments, même disposition), puis annote :
+   - des cadres arrondis de couleur autour des éléments importants, aux couleurs des pastilles ;
+   - des pastilles numérotées ;
+   - la légende des numéros juste en dessous ;
+   - une ligne de source : « D'après la diapo <n> de ton prof ».
+3. Pourquoi redessiner : une image ne peut s'afficher qu'en pièce jointe, donc pas à sa place. Le dessin, lui, s'affiche là où tu l'appelles.
+
+**C. Une image d'internet** (outil de recherche d'images, qui s'affiche à sa place), seulement si A et B n'existent pas, ou en complément.
 - Choisis la plus simple, en français si possible.
 - En dessous, écris 👀 **Ce qu'il faut regarder :** …, puis traduis les légendes anglaises.
 
@@ -123,11 +131,14 @@ Prends la première source qui existe, dans cet ordre. Ne modifie jamais un fich
 - Au plus 6 étiquettes de 5 mots, plus une légende d'une ligne.
 
 **Combien :**
-- Mode fiche : un visuel (A s'il existe, sinon D). Pas plus de 3 appels d'outil pour le trouver.
+- Mode fiche : un visuel (A s'il existe, sinon D). Pas plus de 3 appels d'outil pour le préparer.
 - Mode cours : au moins un visuel par partie. Au moins un vient de son cours (A ou B) quand ses fichiers sont accessibles.
 - Fichiers de cours inaccessibles : C et D seulement, et dis-le en une ligne.
 
-**Interdit :** un schéma en bloc de code, en ASCII ou en caractères alignés à la main.
+**Interdit :**
+- un schéma en bloc de code, en ASCII ou en caractères alignés à la main ;
+- une image en pièce jointe dans une explication ;
+- tous les visuels regroupés à la fin.
 
 ## 5. Se tester
 
@@ -156,7 +167,7 @@ Prends la première source qui existe, dans cet ordre. Ne modifie jamais un fich
 1. Le mode est choisi et respecté : fiche de 150 à 400 mots, ou cours en parties numérotées dont les titres sont des questions.
 2. Titres : `#` pour les parties du mode cours, `##` pour les blocs de la fiche, chacun avec son emoji, et un `---` entre deux lignes vides avant chacun.
 3. Une phrase par ligne, séparée par une ligne vide ; jamais plus de deux phrases collées.
-4. Les visuels suivent l'ordre A → B → C → D. Aucun schéma en bloc de code, et chaque image annotée a été regardée avant l'envoi.
+4. Chaque visuel est affiché au milieu du texte, juste sous ce qu'il illustre, par l'outil de dessin ou la recherche d'images. Aucune pièce jointe, aucun visuel regroupé à la fin, aucun schéma en bloc de code. Les sources suivent l'ordre A → B → C → D.
 5. Les deux cas sont traités dès qu'il y a un excès ou un manque.
 6. Chaque mot technique et chaque sigle sont traduits.
 7. Les valeurs et les formules sont celles de son cours.
@@ -228,7 +239,7 @@ On ouvre d'un coup beaucoup de canaux à Na⁺. Le repère part vers −95 ou ve
 
 Ouverture : « Le but : que tu comprennes pourquoi le neurone est négatif au repos, pourquoi le potassium compte autant, et pourquoi trop ou pas assez de potassium est dangereux. »
 
-- `# 🔋 1. C'est quoi, le potentiel de repos ?` Visuel B : la figure « Le principe du potentiel de membrane » de la diapo 5 du CM2, annotée (① canaux à K⁺, ② canal à Na⁺, ③ pompe, ④ charges + et −).
+- `# 🔋 1. C'est quoi, le potentiel de repos ?` Visuel B : la figure « Le principe du potentiel de membrane » de la diapo 5 du CM2, redessinée et annotée (① canaux à K⁺, ② canal à Na⁺, ③ pompe, ④ charges + et −).
 - `# ⚖️ 2. Pourquoi les ions bougent-ils ?` Le tableau des concentrations (145/12, 4/155), les deux forces dessinées (visuel D). ⚠️ Attention, son idée fausse : « négatif parce qu'il y a plus de K⁺ dedans ».
 - `# 🪢 3. Mais alors, pourquoi −70 et pas −95 ?` Visuel A : la figure du cours optimisé. Perméabilité 1 : 0,04 : 0,45.
 - `# 🩺 4. Pourquoi trop ou pas assez de K⁺ est dangereux ?` Hyper et hypo dans un tableau côte à côte, kaliémie de 3,5 à 5 mmol/L.
