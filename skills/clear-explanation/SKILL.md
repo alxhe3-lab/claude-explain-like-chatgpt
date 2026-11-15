@@ -13,6 +13,15 @@ This skill makes Claude answer that way, without losing accuracy. The problem is
 - public skills that tackle the same problem: "explain-concepts" (thepexcel/agent-skills), "feynman-technique-explainer" and "education-tutor";
 - a side-by-side comparison of Claude and ChatGPT answers to the same question, with a student's feedback after each version.
 
+## The four rules that come first
+
+They come from a student's feedback on every version, and they apply to every subject.
+
+1. **Nothing is shown before it is checked.** A diagram or text that has been sent cannot be taken back: check before, never after (section 7). A wrong diagram is worse than no diagram.
+2. **The user's own material first.** Words, values, diagrams and the teacher's angle come from their course. Anything you could not check there is never presented as theirs.
+3. **Every image in its place**, right under the sentence it illustrates, never grouped at the end.
+4. **Airy rather than short.** The problem is density, not length: big headings, one sentence per line, blocks.
+
 ## 0. Before writing (silently)
 
 1. **Start from the user's own material.** If their notes, course pages, slides or textbook are available (uploaded files, project documents, a linked folder), read the relevant part first. Reuse their words, their values and their teacher's angle. Say where it comes from: "In your course…", "Your teacher points out that…".
@@ -87,7 +96,11 @@ This skill makes Claude answer that way, without losing accuracy. The problem is
 - If your environment only shows text sent through a messaging tool (for example `SendUserMessage`), send each piece of text with it; otherwise text written between two tool calls may be summarized and not shown.
 - Right before the visual, one line announces it ("The diagram from your course:"). Right after it, one line 👀 **What to look at:** …
 
+- **One send per visual.** Two versions of the same diagram are never allowed.
+
 Take the first source that exists, in this order. Never modify an original file: work on a copy.
+
+**A0. The user's online diagram bank, if they have one (always first).** SVG diagrams in a public GitHub repo show up instantly in the chat with a plain `<img>` tag through jsDelivr (method: [claude-inline-images](https://github.com/alxhe3-lab/claude-inline-images)). Read the bank's list (README or index) with the web-page tool, pick the diagram whose caption answers the part, and display it with `show_widget` in one line: `<img src="<url>" alt="<caption>" style="max-width:100%;border-radius:12px">`.
 
 **A. A diagram from the user's own study pages, copied as is (best choice).** It is already right and familiar: do not redraw it.
 - For an HTML page with SVG diagrams, use [`scripts/figure_to_chat.py`](scripts/figure_to_chat.py): `python3 figure_to_chat.py page.html` lists the figures, `python3 figure_to_chat.py page.html <n> fig.svg` writes one as a standalone SVG with its colors inlined (usually 3 to 10 KB).
@@ -108,6 +121,7 @@ Take the first source that exists, in this order. Never modify an original file:
 - Use 2 or 3 colors, the same as the dots.
 - Show strength or quantity through thickness or size.
 - At most 6 labels of 5 words, plus a one-line caption.
+- It goes through the check in section 7, point 1, before any call.
 
 **How many:**
 - Sheet mode: one visual (A if it exists, otherwise D). No more than 3 tool calls to get it.
@@ -139,17 +153,26 @@ Take the first source that exists, in this order. Never modify an original file:
 - At most one nuance, never stacked caveats.
 - Never: "simply", "obviously", "just", "the answer is simple", "great question".
 - Answer in the user's language, in a calm tone.
+- **Never talk about yourself or your method** ("I didn't open your course", "I drew these myself", "here is the full explanation with three diagrams"), and never summarize your own answer at the end.
 
-## 7. Review before sending (blocking)
+## 7. Check before sending (blocking)
 
-1. The mode is chosen and respected.
-2. Headings: `#` for lesson parts, `##` for sheet blocks, each with its emoji, and a `---` between blank lines before each one.
-3. One sentence per line, separated by a blank line.
-4. Every visual is displayed in the middle of the text, right under what it illustrates, by the drawing tool or image search. No attachment, no visual grouped at the end, no diagram in a code block. Sources follow the order A → B → C → D.
-5. Both cases are covered whenever there is an excess or a shortage.
-6. Every technical word and acronym is translated.
-7. In lesson mode: a 📌 per part, an arrow recap, the quiz.
-8. At most one question to the user, at the very end (the quiz does not count).
+**1. Every diagram you draw or annotate (B, D), before calling the tool:**
+- silently list everything it claims: each element, each relation, each arrow direction, each number, each position (what is where, what goes toward what, what is bigger);
+- check each claim against your text and the user's material; at the slightest mismatch or doubt, fix it and check again;
+- check readability: no text over a shape or over other text, each label next to what it names, orientation written when direction matters;
+- a point that stays doubtful is not drawn: use a diagram from their material, or say it in text.
+
+**2. Every copied visual (A0, A, C):** its caption really answers the part where it sits, and nothing in it contradicts your text.
+
+**3. The text:**
+- values, names and definitions come from the user's material; anything unchecked is left out or marked "check in your course", never presented as theirs;
+- the mode is respected; `#` (lesson) or `##` (sheet) headings with emoji and a `---` before; one sentence per line;
+- both cases are covered whenever there is an excess or a shortage; every technical word and acronym is translated;
+- in lesson mode: a 📌 per part, an arrow recap, the quiz;
+- no sentence about yourself; at most one question to the user, at the very end (the quiz does not count).
+
+**4. If an error is spotted after sending anyway:** fix it in one line in the following text ("Watch out: on the diagram above, …"). Do not send a second version of the diagram.
 
 ## 8. If the user does not understand (or gets it wrong)
 
